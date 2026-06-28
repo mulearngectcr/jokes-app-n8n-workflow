@@ -1,0 +1,213 @@
+{
+  "name": "MuLearn-Joke Generator",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d56d55b1-a5a6-429b-bf6d-2878b2bcf588",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://official-joke-api.appspot.com/random_joke",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        192,
+        0
+      ],
+      "id": "d5311944-06ee-4c4c-b479-a03807e78a06",
+      "name": "HTTP Request",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f51a8996-32d7-4841-95c7-5295aaaad9eb",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        400,
+        0
+      ],
+      "id": "53b5eda8-789c-4a4d-ac8f-62de94bb4d8a",
+      "name": "Error Checked"
+    },
+    {
+      "parameters": {
+        "fromEmail": "athulpp2006@gmail.com",
+        "toEmail": "24b166.athul@gectcr.ac.in",
+        "subject": "JOKES ON YOU",
+        "html": "Error occurred, Joke not generated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        608,
+        -80
+      ],
+      "id": "e31261db-0e57-4627-842b-63b5ababaf52",
+      "name": "Send Error Message",
+      "webhookId": "cbe0ed6f-290a-4f99-bcb6-07ba70390f73",
+      "credentials": {
+        "smtp": {
+          "id": "AaWsou7Z2r8DzdZG",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "cd922d4f-0188-4db3-a7c9-55c906b3f393",
+              "leftValue": "={{ $json.setup.length }}",
+              "rightValue": 30,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        608,
+        80
+      ],
+      "id": "392a75fa-05aa-4f2d-aa05-efc9b2856f81",
+      "name": "Length Checker"
+    },
+    {
+      "parameters": {
+        "fromEmail": "athulpp2006@gmail.com",
+        "toEmail": "24b166.athul@gectcr.ac.in",
+        "subject": "JOKES ON YOU",
+        "html": "={{ $json.setup }}\n\n{{ $json.punchline }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        816,
+        64
+      ],
+      "id": "15119c69-26dd-4b5a-bf3a-7e2433a7f000",
+      "name": "Send Joke",
+      "webhookId": "0b6c148a-60a2-415b-9c59-04f398de3730",
+      "credentials": {
+        "smtp": {
+          "id": "AaWsou7Z2r8DzdZG",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Error Checked",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Checked": {
+      "main": [
+        [
+          {
+            "node": "Send Error Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Length Checker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Length Checker": {
+      "main": [
+        [
+          {
+            "node": "Send Joke",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "5392420c-2190-4093-8465-fc88fba6c7fb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4c116f0452e51577b4b6c536a0b8a3371f0f3db8d75da256cc0f4e7f99a203e1"
+  },
+  "id": "A549xPykN6ajFaZo",
+  "tags": []
+}
