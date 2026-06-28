@@ -1,0 +1,92 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        -16
+      ],
+      "id": "f0bc4076-4aba-43f5-bb2d-678f1f8e1ada",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://official-joke-api.appspot.com/random_joke",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -16,
+        -16
+      ],
+      "id": "6112dc67-645b-4ef3-9119-2cf9b4e358b9",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "sendTo": "sreelekshmih4@gmail.com",
+        "subject": "Joke Of the Day",
+        "message": "=<h2 style=\"font-family:Arial;color:brown\">Joke Generator</h2> <p style=\"font-family:Arial,sans-serif\">Setup: {{ $json.setup }}</p> <p style=\"font-family:Arial,sans-serif;\">Punchline:<a style=\"font-style:italic\"> {{ $json.punchline }}</a></p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        192,
+        -16
+      ],
+      "id": "8ac9cb65-be7d-442c-9cf1-b072ce4d3b9d",
+      "name": "Send a message",
+      "webhookId": "c96de5b5-665d-4a98-8ee6-d970dea90b99",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "xLwL3MZdE6Pzrq80",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "b2b12d5b-1da0-41a3-aaf0-c4b43e021703",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e4e118cd0b21c5d6b272259d3a5047e4fbb4e501e42abd6ee9a03f18be7019f0"
+  },
+  "nodeGroups": [],
+  "id": "cvcgCiEPwbPvoZjX",
+  "tags": []
+}
